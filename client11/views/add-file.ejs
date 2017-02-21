@@ -1,0 +1,18 @@
+<% include headerLayoutWithLogin.ejs %>
+
+
+    <section>
+      <form name="form" action="/add-file?access_token=<%= accessToken %>" method="post" enctype="multipart/form-data">
+        <legend>add file form</legend>
+        <div class="form-group">
+          <label for="userfile">file</label>
+          <input type="file" name="userfile" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+      </form>
+    <section>
+
+
+<% include footerLayout.ejs %>

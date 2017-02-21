@@ -1,0 +1,26 @@
+<% include headerLayoutWithLogin.ejs %>
+
+
+    <section>
+      <form name="form" action="/add-reportnfile?access_token=<%= accessToken %>" method="post" enctype='multipart/form-data'>
+        <legend>add report form</legend>
+        <div class="form-group">
+          <label for="client_email">client email</label>
+          <input type="text" name="client_email" placeholder="client_email" required>
+        </div>
+        <div class="form-group">
+          <label for="description">description</label>
+          <input type="textarea" name="description" placeholder="description" required>
+        </div>
+        <div class="form-group">
+          <label for="userfile">file</label>
+          <input type="file" name="userfile" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+      </form>
+    <section>
+
+
+<% include footerLayout.ejs %>

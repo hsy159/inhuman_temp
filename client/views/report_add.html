@@ -1,0 +1,17 @@
+<section>
+    <form name="form" ng-submit="reportadd()">
+        <legend>add report form</legend>
+        <div class="form-group">
+            <label for="email">email</label>
+            <input type="text" name="email" ng-model="input.email" placeholder="email" required> 
+        </div>
+        <div class="form-group">
+            <label for "description">description</label>
+            <input type="textarea" name="description" ng-model="input.description" placeholder="description" required>
+        </div>
+        <div class="actions">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+<section>
+<script src="/client/js/controllers/reportadd.controller.js"></script>

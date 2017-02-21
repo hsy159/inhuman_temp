@@ -1,0 +1,29 @@
+<% if (accessToken) { %>
+<%  include headerLayoutWithLogin.ejs %>
+<% }else{ %>
+<%  include headerLayoutWithoutLogin.ejs %>
+<% } %>
+
+
+    <section>
+      <h3>My reports list</h3>
+      <ul>
+        <% for(var i=0; i<reports.length; i++) {%>
+          <li>
+            <form action="/my-reports-del/<%= reports[i].id %>?access_token=<%= accessToken %>" method="POST">
+              <%= i+1 %>.
+              <% if (reports[i].client_email) { %> client_email : <%= reports[i].client_email %>, <% } %>
+              <% if (reports[i].description) { %> description : <%= reports[i].description %>, <% } %>
+              <% if (reports[i].date) { %> date : <%= reports[i].date %>, <% } %>
+              <% if (reports[i].operator_id) { %> operator_id : <%= reports[i].operator_id %>, <% } %>
+              <% if (reports[i].id) { %> report_id : <%= reports[i].id %> <% } %>
+              <button type="button" class="btn btn-default"><a href="/my-reports-mod/<%= reports[i].id %>?access_token=<%= accessToken %>">Edit</a></button>
+              <button type="submit" class="btn btn-default">Delete</button>
+            </form>
+         </li>
+        <% } %>
+      </ul>
+    <section>
+
+
+<% include footerLayout.ejs %>
