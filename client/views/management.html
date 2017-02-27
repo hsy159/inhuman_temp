@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="./js/controllers/management.controller.js"></script>
+  <title>Management</title>
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      margin: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+
+</head>
+<section>
+
+  <body>
+    {{my}} {{myScanMetaData}} {{myClientId}} {{myClient}} {{birth}}
+    <h1 align="center">회원정보 관리</h1>
+    <br>
+    <h3 align="right">Operator : {{currentOperator.name}}</h3>
+    <button align="left" style="background-color: greenyellow">진행필요</button>
+    <button align="left" style="background-color:orangered">진행중</button>
+    <button align="left" style="background-color: dodgerblue">결과보기</button>
+
+    <br>
+    <br>
+    <br>
+    <h3 align="center">Recent clients</h3>
+
+    <table ng-show="currentOperator">
+      <tr>
+        <th>email</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>성별</th>
+        <th>특징점</th>
+        <th>측정일</th>
+        <th>측정장소</th>
+      </tr>
+
+      <tr ng-repeat="myclient in myClient">
+        <td>{{myclient.email}}</td>
+        <td>{{myclient.firstName}} {{myclient.lastName}} </td>
+        <td>{{this_Year - birth[$index]}}<td>
+        <td>{{myclient.gender}}</td>
+        <td>현재특징점</td>
+        <td>{{myScanMetaData[$index].date|date:'yyyy년 MM월 dd일'}}</td>
+        <td>{{myScanMetaData[$index].scannerId}}</td>
+      </tr>
+    </table>
+
+    <br>
+    <h3 align="center">My clients</h3>
+    <table ng-show="currentOperator">
+      <tr>
+        <th>email</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>성별</th>
+        <th>결과확인</th>
+        <th>측정일</th>
+        <th>측정장소</th>
+      </tr>
+
+      <tr>
+        <td>유저이메일</td>
+        <td>유저이름</td>
+        <td>유저나이</td>
+        <td>유저성별</td>
+        <td>레포트 / 특징점</td>
+        <td>레포트측정일</td>
+        <td>레포트측정장소</td>
+      </tr>
+    </table>
+
+
+    <!--<p>Records: <strong id="msg"></strong></p>
+
+<p><a href="/">Home</a></p>-->
+  </body>
+</section>
+
+</html>

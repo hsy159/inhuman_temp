@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "Operator": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "User": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "AccessToken": {
+    "dataSource": "inhuman",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "filestore": {
+    "dataSource": "storage",
+    "public": true
+  },
+  "Report": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "Client": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "ScanMetaData": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "LandmarkAuto": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "LandmarkRevision": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "BodySize": {
+    "dataSource": "inhuman",
+    "public": true
+  },
+  "SizeKorea": {
+    "dataSource": "inhuman",
+    "public": true
+  }
+}

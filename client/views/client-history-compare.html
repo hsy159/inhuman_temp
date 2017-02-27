@@ -1,0 +1,40 @@
+<script src="/client/js/controllers/reportmy.controller.js"></script>
+
+<head>
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      margin: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+
+</head>
+<div ng-show="currentClient||currentOperator">
+  <h4 align="center">{{currentClient.email}}님의 history</h4>
+  <br>
+  <!--<table><tr><th>email</th><th>{{currentClient.email}}</th></tr>
+    <tr><td>bmi</td><td>{{myreport.bmi}}</td></tr>
+    <tr><td>whr</td><td>{{myreport.whr}}</td></tr>-->
+  <section>
+    <table>
+      <tr>
+        <th>빈칸</th>
+        <th ng-repeat="myscanmetadata in myscanmetadata">{{myscanmetadata.date}}</th>
+        <th>비교</th>
+      </tr>
+      <tr ng-repeat="(key,value) in myReport[0]">
+        <th>{{key}}</th>
+        <td ng-repeat="myreport in myReport">{{value}}</td>
+      </tr>
+    </table>
+    <br>
+
+  </section>
+
+  </table>
+</div>

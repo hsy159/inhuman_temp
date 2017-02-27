@@ -10,8 +10,8 @@ angular
     'ui.router',
     'lbServices'
   ])
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider,
-      $urlRouterProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
+    $urlRouterProvider) {
     $stateProvider
       .state('forbidden', {
         url: '/forbidden',
@@ -21,52 +21,57 @@ angular
         url: '/home',
         templateUrl: 'views/home.html'
       })
-      .state('report', {
-        url: '/report',
-        templateUrl: 'views/report.html',
-        controller:'ReportController'
-      })
-      .state('3D_View', {
-        url: '/3D_View',
-        templateUrl: 'views/3D_View.html'
-      })
       .state('myreport', {
         url: '/myreport',
         templateUrl: 'views/report_my.html',
-        controller:'MyReportController'
+        controller: 'MyReportController'
       })
-      .state('addreport', {
-        url: '/addreport',
-        templateUrl: 'views/report_add.html',
-        controller:'AddReportController'
-      })
-      .state('addreportfile', {
-        url: '/addreportfile',
-        templateUrl: 'views/report_fileadd.html',
-        //controller:'AddReportFileController'
-      })
-      .state('addfile', {
-        url: '/addfile',
-        templateUrl: 'views/file_upload.html'
-      })
-      .state('file', {
-        url: '/file',
-        templateUrl: 'views/file.html',
-        controller:'FileController'
-      })
+      // .state('report', {
+      //   url: '/report',
+      //   templateUrl: 'views/report.html',
+      //   controller:'ReportController'
+      // })
+      // .state('addreport', {
+      //   url: '/addreport',
+      //   templateUrl: 'views/report_add.html',
+      //   controller:'AddReportController'
+      // })
+      // .state('file', {
+      //   url: '/file',
+      //   templateUrl: 'views/file.html',
+      //   controller:'FileController'
+      // })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'AuthLoginController'
+        controller: 'AuthLoginController_client'
+      })
+      .state('login-operator', {
+        url: '/login-operator',
+        templateUrl: 'views/login-operator.html',
+        controller: 'AuthLoginController_operator'
       })
       .state('logout', {
         url: '/logout',
-        controller: 'AuthLogoutController'
+        controller: 'AuthLogoutController_client'
       })
-      .state('sign-up', {
-        url: '/sign-up',
-        templateUrl: 'views/sign-up-form.html',
-        controller: 'SignUpController'
+      .state('sign-up-agree-client', {
+        url: '/sign-up-agree-client',
+        templateUrl: 'views/sign-up-agree-client.html'
+      })
+      .state('sign-up-agree-operator', {
+        url: '/sign-up-agree-operator',
+        templateUrl: 'views/sign-up-agree-operator.html'
+      })
+      .state('sign-up-client', {
+        url: '/sign-up-client',
+        templateUrl: 'views/sign-up-form-client.html',
+        controller: 'SignUpController_client'
+      })
+      .state('sign-up-operator', {
+        url: '/sign-up-operator',
+        templateUrl: 'views/sign-up-form-operator.html',
+        controller: 'SignUpController_operator'
       })
       .state('sign-up-success', {
         url: '/sign-up-success',
@@ -76,10 +81,35 @@ angular
         url: '/account',
         templateUrl: 'views/account.html'
       })
-    $urlRouterProvider.otherwise('account');
+      .state('3D_View', {
+        url: '/3D_View',
+        templateUrl: 'views/3D_View.html',
+        controller: '3DController'
+      }) 
+      .state('management', {
+        url: '/management',
+        templateUrl: 'views/management.html',
+        controller: 'ManagementController'
+      })
+      .state('client-history-compare', {
+        url: '/client-history-compare',
+        templateUrl: 'views/client-history-compare.html',
+        controller: 'MyReportController'
+      })
+      .state('addon', {
+        url: '/addon',
+        templateUrl: 'views/addon.html',
+        controller: 'AddOnController'
+      })       
+      .state('bodysize', {
+        url: '/bodysize',
+        templateUrl: 'views/bodysize.html',
+        controller: 'BodySizeController'
+      }) 
+    $urlRouterProvider.otherwise('home');
   }])
-  .run(['$rootScope', '$state', 'LoopBackAuth', 'AuthService', function($rootScope, $state, LoopBackAuth, AuthService) {
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
+  .run(['$rootScope', '$state', 'LoopBackAuth', 'AuthService_client', function ($rootScope, $state, LoopBackAuth, AuthService_client) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
       // redirect to login page if not logged in
       if (toState.authenticate && !LoopBackAuth.accessTokenId) {
         event.preventDefault(); //prevent current page from loading
@@ -98,7 +128,7 @@ angular
 
     // Get data from localstorage after pagerefresh
     // and load user data into rootscope.
-    if (LoopBackAuth.accessTokenId && !$rootScope.currentUser) {
-      AuthService.refresh(LoopBackAuth.accessTokenId);
+    if (LoopBackAuth.accessTokenId && !$rootScope.currentClient) {
+      AuthService_client.refresh(LoopBackAuth.accessTokenId);
     }
   }]);

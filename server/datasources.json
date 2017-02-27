@@ -1,0 +1,23 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory",
+    "file": "db.json"
+  },
+  "inhuman": {
+    "host": "ds153667.mlab.com/",
+    "port": 53667,
+    "url": "mongodb://inhuman:inhuman@ds153667.mlab.com:53667/inhuman",
+    "database": "inhuman",
+    "password": "inhuman",
+    "name": "inhuman",
+    "user": "inhuman",
+    "connector": "mongodb"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./server/storage"
+  }
+}

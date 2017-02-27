@@ -1,0 +1,45 @@
+<section>
+  <form name="form" ng-submit="register()">
+    <fieldset>
+      <legend>Sign up form</legend>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input name="email" type="text" ng-model="user.email">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input name="password" type="password" ng-model="user.password">
+      </div>
+
+      <div class="form-group">
+        <label>Name</label>
+        <input name="firstName" type="text" ng-model="user.firstName">
+        <input name="lastName" type="text" ng-model="user.lastName">
+      </div>
+      
+      <div class="form-group">
+        <label>gender</label>
+        <input type="radio" name="gender" value="male" ng-model="user.gender"> Male
+        <input type="radio" name="gender" value="female" ng-model="user.gender"> Female
+        <input type="radio" name="gender" value="other" ng-model="user.gender"> Other
+      </div>
+      
+      <div class="form-group">
+        <label>birth</label>
+        <input name="birth" type="date" ng-model="user.birth">
+      </div>
+
+      <div class="form-group">
+        <label>address</label>
+        <input name="address" type="text" ng-model="user.address">
+      </div>
+
+      <div class="actions">
+        <label></label>
+        <button>Sign up</button>
+      </div>
+    </fieldset>
+  </form>
+</section>

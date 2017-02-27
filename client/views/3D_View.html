@@ -1,38 +1,63 @@
-<html>
-	<head>
-		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
-	</head>
-	<body>
-		<script src="C:/Users/06135/OneDrive/문서/inhuman_nodejs/client/threejs_master/build/three.js"></script>
-		<script>
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        margin: 100px;
+        margin-left: 100px;
+        margin-right: auto;
+    }
+</style>
 
-			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			document.body.appendChild( renderer.domElement );
+<div id="3d_view"></div>
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+<div id="size">
+    <table ng-show="currentClient||currentOperator">
+        <tr>
+            <th>Name</th>
+            <th>Value(cm)</th>
+        </tr>
+        <tr>
+            <td>Breast Size</td>
+            <td>{{reportinfo.breast_size}}</td>
+        </tr>
+        <tr>
+            <td>Waist Size</td>
+            <td>{{reportinfo.waist_size}}</td>
+        </tr>
+        <tr>
+            <td>Hip Size</td>
+            <td>{{reportinfo.hip_size}}</td>
+        </tr>
+        <tr>
+            <td>Volume</td>
+            <td>{{reportinfo.volume}}</td>
+        </tr>
+        <tr>
+            <td>Surface</td>
+            <td>{{reportinfo.surface}}</td>
+        </tr>
+        <tr>
+            <td>BMI</td>
+            <td>{{reportinfo.bmi}}</td>
+        </tr>
+        <tr>
+            <td>WHR</td>
+            <td>{{reportinfo.whr}}</td>
+        </tr>
+    </table>
+</div>
+<div id="summary">
+    <img src="/api/filestores/uploadFile/download/info_sample.jpg">
+</div>
+<div>
+    <button onClick="window.open('views/diag_info.html','diag information','width=850,height=700')">진단 정보</button>
+    <button>비교</button>
+</div>
+<script src="/client/js/threejs_master/examples/js/loaders/STLLoader.js"></script>
+<script src="/client/js/threejs_master/examples/js/controls/OrbitControls.js"></script>
+<script src="/client/js/threejs_master/examples/js/Detector.js"></script>
 
-			camera.position.z = 5;
+<script src="/client/js/controllers/3d.controller.js"></script>
 
-			var render = function () {
-				requestAnimationFrame( render );
-
-				cube.rotation.x += 0.1;
-				cube.rotation.y += 0.1;
-
-				renderer.render(scene, camera);
-			};
-
-			render();
-		</script>
-	</body>
-</html>

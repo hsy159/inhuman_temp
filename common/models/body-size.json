@@ -1,0 +1,28 @@
+{
+  "name": "BodySize",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "AutoSizer_Ver": {
+      "type": "string",
+      "required": true
+    },
+    "SizeKorea_Ver": {
+      "type": "string",
+      "required": true
+    },
+    "standard": {
+      "type": "object"
+    },
+    "nonstandard": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

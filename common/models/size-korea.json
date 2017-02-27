@@ -1,0 +1,30 @@
+{
+  "name": "SizeKorea",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "required": true
+    },
+    "makedate": {
+      "type": "date",
+      "required": true
+    },
+    "landmark": {
+      "type": "object",
+      "required": true
+    },
+    "measurement": {
+      "type": "object",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,43 @@
+<script src="/client/js/controllers/diag.controller.js"></script>
+
+<style>
+    table,
+    tr,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        margin: auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<h2>진단정보</h2>
+<table>
+    <div id="diag_picture" item-height="250">
+        <tr item-width="795" item-height="200">사진</tr>
+    </div>
+    <div id="diag_diagram" item-height="500">
+        <tr>
+            <td item-width="795" item-height="200">거북목 골반 불균형 측만증 지수</td>
+            <td item-width="795" item-height="200">하지 불균형 지수</td>
+            <td item-width="795" item-height="200">BMI WHR</td>
+        </tr>
+    </div>
+    <div id="diag_description" item-height="250">
+        <table item-width="795" item-height="200">종합 평가</table>
+    </div>
+
+    <div id="video_recommend">
+        <tr item-width="795">
+            <td>
+                <iframe width="390" height="220" src="https://www.youtube.com/embed/72GtNWCg5D0" frameborder="0" allowfullscreen></iframe>
+            </td>
+            <td>
+                <iframe width="390" height="220" src="https://www.youtube.com/embed/2u97jwzp0Jw" frameborder="0" allowfullscreen></iframe>
+            </td>
+        </tr>
+    </div>
+</table>
+<button onclick="self.close()">닫기</button>
+

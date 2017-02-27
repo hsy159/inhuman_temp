@@ -1,3 +1,26 @@
-{{myreport}}
-<script src="/client/js/controllers/reportmy.controller.js"></script>
+<head>
+    <script src="./js/controllers/reportmy.controller.js"></script>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 
+</head>
+<section ng-repeat="myreport in myReport">
+    <h2 align="center">{{myscanmetadata[$index].date}}</h2>
+    <table>
+        <tr ng-repeat="(key,val) in myreport">
+            <th>{{key}}</th>
+            <td>{{val}}</td>
+        </tr>
+    </table>
+    <br>
+    
+</section>
