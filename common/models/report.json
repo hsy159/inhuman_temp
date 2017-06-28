@@ -1,5 +1,5 @@
 {
-  "name": "report",
+  "name": "Report",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -7,22 +7,141 @@
     "strictObjectIDCoercion": true
   },
   "properties": {
-    "operator_id": {
+    "metaData": {
       "type": "string",
       "required": true
     },
-    "client_email": {
-      "type": "string",
-      "required": true
+    "chest": {
+      "type": "object"
     },
-    "description": {
-      "type": "string"
+    "abdomen": {
+      "type": "object"
     },
-    "date": {
-      "type": "date"
+    "pelvis": {
+      "type": "object"
     },
-    "storageLink": {
-      "type": "string"
+    "femur": {
+      "type": "object"
+    },
+    "tibia": {
+      "type": "object"
+    },
+    "upper_extremity": {
+      "type": "object"
+    },
+    "anglABP": {
+      "type": "object"
+    },
+    "anglBCP": {
+      "type": "object"
+    },
+    "anglCDP": {
+      "type": "object"
+    },
+    "anglDEP": {
+      "type": "object"
+    },
+    "distAB": {
+      "type": "object"
+    },
+    "distBC": {
+      "type": "object"
+    },
+    "distCD": {
+      "type": "object"
+    },
+    "distDE": {
+      "type": "object"
+    },
+    "anglABC": {
+      "type": "object"
+    },
+    "anglBCD": {
+      "type": "object"
+    },
+    "anglCDE": {
+      "type": "object"
+    },
+    "distAP": {
+      "type": "object"
+    },
+    "distBP": {
+      "type": "object"
+    },
+    "distCP": {
+      "type": "object"
+    },
+    "distDP": {
+      "type": "object"
+    },
+    "distEP": {
+      "type": "object"
+    },
+    "anglTiAx": {
+      "type": "object"
+    },
+    "anglFeAx": {
+      "type": "object"
+    },
+    "anglTiFe": {
+      "type": "object"
+    },
+    "anglSTiAx": {
+      "type": "object"
+    },
+    "anglSFeAx": {
+      "type": "object"
+    },
+    "anglSFeSTi": {
+      "type": "object"
+    },
+    "distHandAnkle": {
+      "type": "object"
+    },
+    "anglHip": {
+      "type": "number"
+    },
+    "distKnee": {
+      "type": "number"
+    },
+    "distAnkle": {
+      "type": "number"
+    },
+    "tibia_pt3": {
+      "type": "object"
+    },
+    "femur_pt3": {
+      "type": "object"
+    },
+    "shoulder_gradient": {
+      "type": "object"
+    },
+    "stature": {
+      "type": "number"
+    },
+    "weight": {
+      "type": "object"
+    },
+    "breast_size": {
+      "type": "number"
+    },
+    "waist_size": {
+      "type": "number"
+    },
+    "hip_size": {
+      "type": "number"
+    },
+    "volume": {
+      "type": "number"
+    },
+    "surface": {
+      "type": "number"
+    },
+    "bmi": {
+      "type": "number"
+    },
+    "whr": {
+      "type": "number"
     }
   },
   "validations": [],
@@ -30,12 +149,6 @@
   "acls": [
     {
       "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "DENY"
-    },
-    {
-      "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW"

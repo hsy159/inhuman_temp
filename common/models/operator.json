@@ -1,19 +1,44 @@
 {
-  "name": "operator",
+  "name": "Operator",
   "base": "User",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "gender": {
+      "type": "string"
+    },
+    "birth": {
+      "type": "date"
+    }
+  },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "clients": {
+      "type": "hasMany",
+      "model": "Client",
+      "foreignKey": "publisherId"
+    }
+  },
   "acls": [
     {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
-      "permission": "DENY"
+      "permission": "ALLOW"
     }
   ],
   "methods": {}
