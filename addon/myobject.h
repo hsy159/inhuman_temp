@@ -17,22 +17,23 @@ public:
   static void NewInstance(const v8::FunctionCallbackInfo<v8::Value> &args);
 
 private:
-  explicit MyObject(double value = 0);
+  //explicit MyObject(double value = 0);
+  explicit MyObject();
   ~MyObject();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value> &args);
-  static void PlusOne(const v8::FunctionCallbackInfo<v8::Value> &args);
+  //static void PlusOne(const v8::FunctionCallbackInfo<v8::Value> &args);
   static v8::Persistent<v8::Function> constructor;
 
-  double value_;
+  //double value_;
 
   static CNextBody m_NB;
   static void GetLandmark(const v8::FunctionCallbackInfo<v8::Value> &args);
   static void GetBodySize(const v8::FunctionCallbackInfo<v8::Value> &args);
 
-  //CGccAnalysis m_ga;
-
   // CGccAnalysis
+  static CGccAnalysis m_ga;
+  static void LoadFile(const v8::FunctionCallbackInfo<v8::Value> &args);
   static void CalcVnSData(const v8::FunctionCallbackInfo<v8::Value> &args);     // volume
   static void CalcLateralData(const v8::FunctionCallbackInfo<v8::Value> &args); // lateral
   static void CalcHipKneeData(const v8::FunctionCallbackInfo<v8::Value> &args); // hip&knee

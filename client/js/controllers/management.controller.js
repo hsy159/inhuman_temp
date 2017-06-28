@@ -10,10 +10,8 @@
                 $scope.myClient = [];
                 $scope.myReport = [];
                 $scope.this_Year = new Date().getFullYear();
-                $scope.birth = [];
-                $scope.getAge = function(a,b) {
-                    return b-a+1;
-                }
+                $scope.birth_Year = [];
+                $scope.age = [];
                 ScanMetaData
                     .find(
                     {
@@ -41,7 +39,8 @@
                                 .$promise
                                 .then(function (client) {
                                     $scope.myClient.push(client[0]);
-                                    $scope.birth.push(client[0].birth);
+                                    $scope.birth_Year.push(new Date(client[0].birth).getFullYear());
+                                    $scope.age.push($scope.this_Year - $scope.birth_Year[$scope.birth_Year.length-1]+1);
                                 });
                         }
                     });

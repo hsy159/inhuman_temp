@@ -12,7 +12,33 @@
 
 <div id="3d_view"></div>
 
-<div id="size">
+<!--<section ng-repeat="(key,val) in standard">{{key}} : {{val}}</section>
+<br><br><br>
+<section ng-repeat="(key,val) in non_standard">{{key}} : {{val}}</section>
+<br><br><br>-->
+
+<table>
+    <th>특징점</th>
+    <td>위치</td>
+    <td>선택</td>
+    <tr ng-repeat="(key,val) in standard">
+        <th>{{key}}</th>
+        <td>{{val}}</td>
+        <td><input type="checkbox" id="{{key}}" ng-model="confirmed1[$index]" ng-click="select_dot(confirmed1[$index], 1, key)"></td>
+    </tr>
+</table>
+
+<table>
+    <th>특징점</th>
+    <td>위치</td>
+    <td>선택</td>
+    <tr ng-repeat="(key,val) in non_standard">
+        <th>{{key}}</th>
+        <td>{{val}}</td>
+        <td><input type="checkbox" id="{{key}}" ng-model="confirmed2[$index]" ng-click="select_dot(confirmed2[$index], 0, key)"></td>
+    </tr>
+</table>
+<!--<div id="size">
     <table ng-show="currentClient||currentOperator">
         <tr>
             <th>Name</th>
@@ -47,7 +73,7 @@
             <td>{{reportinfo.whr}}</td>
         </tr>
     </table>
-</div>
+</div>-->
 <div id="summary">
     <img src="/api/filestores/uploadFile/download/info_sample.jpg">
 </div>
@@ -58,6 +84,4 @@
 <script src="/client/js/threejs_master/examples/js/loaders/STLLoader.js"></script>
 <script src="/client/js/threejs_master/examples/js/controls/OrbitControls.js"></script>
 <script src="/client/js/threejs_master/examples/js/Detector.js"></script>
-
 <script src="/client/js/controllers/3d.controller.js"></script>
-

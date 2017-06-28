@@ -14,6 +14,21 @@ public:
 	CGccGeometry();
 	virtual ~CGccGeometry();
 
+public:
+	// stlFacet 리스트 형식을 Vertex 리스트 형식으로 변환
+	bool STLtoVertexList(VERTEX** VertexList, int& vertexLength,
+		FACE** FaceList, int& faceLength,
+		BinarySTLtriangle* STLFaceList, int stlLenght);
+	void CalcVertexNormal(VERTEX* NormalList, int VertexLength, FACE* FaceList, int FaceLength);
+	void TranslatedModel(VERTEX* VertexList, int VertexLength, float X, float Y, float Z);
+protected:
+	// Y축으로 정렬하여 삽입
+	int Insert(VERTEX* VertexList, VERTEX InsertVertex, int& Last);
+	int Insert(VERTEX* VertexList, float InsertVertex[3], int& Last);
+	void CalcNormalVector(VERTEX V1, VERTEX V2, VERTEX V3, VERTEX& Normal);
+	void ReduceToUnit(VERTEX& Vertex);
+	void Translated(VERTEX& Vertex, float X, float Y, float Z);
+
 	// {{ CGccAnalysis::CalcVnSData() 에서 사용
 public:
 	/*

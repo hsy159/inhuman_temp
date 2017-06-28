@@ -2,6 +2,34 @@
 
 #include <string.h> // memset
 
+
+/*
+// https://en.wikipedia.org/wiki/STL_(file_format)
+// Binary STL
+UINT8[80] - Header
+UINT32 - Number of triangles
+
+foreach triangle
+REAL32[3] - Normal vector
+REAL32[3] - Vertex 1
+REAL32[3] - Vertex 2
+REAL32[3] - Vertex 3
+UINT16 - Attribute byte count
+end
+*/
+
+// 20170303 sdk struct 에서 short 사이즈 만큼만 설정하기 위해서
+#pragma pack(push, 2)
+typedef struct _BinarySTLtriangle
+{
+	float Normal[3];
+	float Vertex1[3];
+	float Vertex2[3];
+	float Vertex3[3];
+	short Attribute;
+} BinarySTLtriangle;
+#pragma pack(pop)
+
 typedef struct _VERTEX
 {
 	float x;

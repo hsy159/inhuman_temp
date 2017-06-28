@@ -8,19 +8,12 @@
 
 //using namespace std;
 
-// json 만들기
-const std::string JSONOpen = "{";
-const std::string JSONClose = "}";
-const std::string JSONColon = ":";
-const std::string JSONComma = ",";
-const std::string JSONAryOpen = "[";
-const std::string JSONAryClose = "]";
-
 CGccAnalysis::CGccAnalysis()
 	: m_VertexList(nullptr)
 	, m_VertexLength(0)
 	, m_FaceList(nullptr)
 	, m_FaceLength(0)
+	, m_NormalList(nullptr)
 	, m_ClickPoints(nullptr)
 	, m_ClickPointsCount(0)
 {
@@ -56,9 +49,107 @@ CGccAnalysis::CGccAnalysis()
 
 CGccAnalysis::~CGccAnalysis()
 {
-	InitClickPoints();
+	if (m_VertexList)
+	{
+		delete[] m_VertexList;
+		m_VertexList = NULL;
+	}
+
+	if (m_FaceList)
+	{
+		delete[] m_FaceList;
+		m_FaceList = nullptr;
+	}
+
+	if (m_NormalList)
+	{
+		delete[] m_NormalList;
+		m_NormalList = nullptr;
+	}
+
+	if (m_ClickPoints)
+	{
+		delete[] m_ClickPoints;
+		m_ClickPoints = nullptr;
+	}
 }
 
+
+bool CGccAnalysis::LoadFile(std::string strPath)
+{
+	FILE *fileHandle = fopen(strPath.c_str(), "rb");
+
+	if (nullptr == fileHandle)
+	{
+		printf("The file [%s] was not opened\n", strPath.c_str());
+		return false;
+	}
+
+	// Header
+	char buffer[82] = { 0 };
+	size_t nRead = 0;
+	nRead = fread(buffer, sizeof(char), 80, fileHandle);
+
+	// Number of triangles
+	int nTriangle = 0;
+	nRead = fread(&nTriangle, sizeof(int), 1, fileHandle);
+
+	//
+	BinarySTLtriangle *binSTLtriangle = new BinarySTLtriangle[nTriangle];
+	memset(binSTLtriangle, 0x00, sizeof(BinarySTLtriangle) * nTriangle);
+
+	nRead = fread(binSTLtriangle, sizeof(BinarySTLtriangle), nTriangle, fileHandle);
+	fclose(fileHandle);
+	fileHandle = nullptr;
+
+	// 20170306 sdk m_VertexLength != nTriangle ?????????????????????
+	CGccGeometry geo;
+	geo.STLtoVertexList(&m_VertexList, m_VertexLength,
+		&m_FaceList, m_FaceLength,
+		binSTLtriangle, nTriangle);
+
+	if (binSTLtriangle)
+	{
+		delete[] binSTLtriangle;
+		binSTLtriangle = nullptr;
+	}
+
+	//
+	m_NormalList = new VERTEX[m_VertexLength];
+
+	geo.CalcVertexNormal(m_NormalList, m_VertexLength, m_FaceList, m_FaceLength);
+	VERTEX Min;
+	VERTEX Max;
+	geo.GetMinMax(m_VertexList, m_VertexLength, Min, Max);
+	geo.TranslatedModel(m_VertexList, m_VertexLength, -(Min.x + (Max.x - Min.x) / 2), -(Min.y + (Max.y - Min.y) / 2), -(Min.z + (Max.z - Min.z) / 2));
+
+	// stl
+	geo.RotateModelD(m_VertexList, m_VertexLength, -27.f, 0.f, -90.f);
+	geo.RotateModelD(m_NormalList, m_VertexLength, -27.f, 0.f, -90.f);
+
+	return true;
+}
+
+// 20170308 sdk 나중에 튜닝 포인트 배열을 vector로 변환
+void CGccAnalysis::SetClickPoint(std::vector<VERTEX> vertex)
+{
+	if (m_ClickPoints)
+	{
+		delete[] m_ClickPoints;
+		m_ClickPoints = nullptr;
+	}
+
+	m_ClickPointsCount = vertex.size();
+	m_ClickPoints = new VERTEX[m_ClickPointsCount];
+	memset(m_ClickPoints, 0x00, sizeof(VERTEX) * m_ClickPointsCount);
+
+	for (int i = 0; i < m_ClickPointsCount; i++)
+	{
+		m_ClickPoints[i].x = vertex[i].x;
+		m_ClickPoints[i].y = vertex[i].y;
+		m_ClickPoints[i].z = vertex[i].z;
+	}
+}
 
 void CGccAnalysis::InitClickPoints(int nCnt)
 {
@@ -74,13 +165,22 @@ void CGccAnalysis::InitClickPoints(int nCnt)
 	memset(m_ClickPoints, 0x00, sizeof(VERTEX) * m_ClickPointsCount);
 }
 
-const std::string CGccAnalysis::CalcVnSData()
+const std::string CGccAnalysis::CalcVnSData(std::vector<VERTEX> vertex)
 {
+	if (vertex.size() != 8)
+	{
+		return "{}";
+	}
+
+	SetClickPoint(vertex);
+
+	//
 	CGccGeometry geo;
-	float volume[6][2], surface[6][2] = { 0.f };
+	float volume[6][2] = { 0.f };
+	float surface[6][2] = { 0.f };
 
 	// test code
-	InitClickPoints(8);
+	//InitClickPoints(8);
 	// test code
 
 	/*
@@ -179,8 +279,16 @@ const std::string CGccAnalysis::CalcVnSData()
 	return strJson;
 }
 
-const std::string CGccAnalysis::CalcLateralData()
+const std::string CGccAnalysis::CalcLateralData(std::vector<VERTEX> vertex)
 {
+	if (vertex.size() != 10)
+	{
+		return "{}";
+	}
+
+	SetClickPoint(vertex);
+
+	/*
 	//
 	VERTEX Temp[10];
 
@@ -195,6 +303,7 @@ const std::string CGccAnalysis::CalcLateralData()
 	}
 
 	memcpy(m_ClickPoints, Temp, sizeof(VERTEX) * 10);
+	*/
 
 	/*
 	input : Img/Lateral_F.png, Lateral_M.png
@@ -366,7 +475,7 @@ const std::string CGccAnalysis::CalcLateralData()
 		for (j = 0; j < nCNTSUB; j++)
 		{
 			strJson += strKeysSub[j] + JSONColon + std::to_string(m_LateralData[(i * nCNTSUB) + j]);
-			
+
 			if (j < nCNTSUB - 1)
 			{
 				strJson += JSONComma;
@@ -392,8 +501,16 @@ const std::string CGccAnalysis::CalcLateralData()
 	return strJson;
 }
 
-const std::string CGccAnalysis::CalcHipKneeData()
+const std::string CGccAnalysis::CalcHipKneeData(std::vector<VERTEX> vertex)
 {
+	if (vertex.size() != 6)
+	{
+		return "{}";
+	}
+
+	SetClickPoint(vertex);
+
+	//
 	CGccGeometry geo;
 	VERTEX* GirthPT = nullptr;
 	int GirthLen[4] = { 0 };
@@ -401,7 +518,7 @@ const std::string CGccAnalysis::CalcHipKneeData()
 	VERTEX vxTemp1, vxTemp2;
 
 	// test code
-	InitClickPoints(6);
+	//InitClickPoints(6);
 	// test code
 
 	/*
@@ -961,8 +1078,16 @@ const std::string CGccAnalysis::XY_toJsonStr(float x, float y)
 	return strJson;
 }
 
-const std::string CGccAnalysis::CalcSpineData()
+const std::string CGccAnalysis::CalcSpineData(std::vector<VERTEX> vertex)
 {
+	if (vertex.size() != 5)
+	{
+		return "{}";
+	}
+
+	SetClickPoint(vertex);
+
+	//
 	VERTEX GradientPoint[2];
 	float fGradient = 0.f;
 	float Volume[2] = { 0.f };
@@ -972,7 +1097,7 @@ const std::string CGccAnalysis::CalcSpineData()
 	float RipHumpData[2] = { 0.f };
 
 	// test code
-	InitClickPoints(5);
+	//InitClickPoints(5);
 	// test code
 
 	/*
@@ -1750,8 +1875,16 @@ void CGccAnalysis::CalcSpineRibHumpData(VERTEX Point[4], float Data[2], VERTEX G
 	GirthTemp = nullptr;
 }
 
-const std::string CGccAnalysis::CalcShapeData()
+const std::string CGccAnalysis::CalcShapeData(std::vector<VERTEX> vertex)
 {
+	if (vertex.size() != 3)
+	{
+		return "{}";
+	}
+
+	SetClickPoint(vertex);
+
+	//
 	CGccGeometry geo;
 	VERTEX* Girthpt = nullptr;
 	float Girth[4] = { 0.f };
@@ -1759,7 +1892,7 @@ const std::string CGccAnalysis::CalcShapeData()
 	int GirthLen[4] = { 0 };
 
 	// test code
-	InitClickPoints(3);
+	//InitClickPoints(3);
 	// test code
 
 	/*

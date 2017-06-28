@@ -21,8 +21,10 @@ npm-debug.log
 
 ##################################################
 
+.vscode
 addon/GSizerKLib
 bower_components
+client/js/services/lb-services.js
 
 ##################################################
 
@@ -49,7 +51,8 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/
+build
+build/config.gypi
 build/Release
 
 # Dependency directories

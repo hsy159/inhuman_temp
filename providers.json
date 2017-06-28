@@ -1,0 +1,25 @@
+{
+  "local": {
+    "provider": "local",
+    "module": "passport-local",
+    "usernameField": "username",
+    "passwordField": "password",
+    "authPath": "/auth/local",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/local",
+    "failureFlash": true
+  },
+  "naver-login": {
+    "provider": "naver",
+    "module": "passport-naver",
+    "clientID": "VtRMBJs1mEiIS7yc2Drx",
+    "clientSecret": "dsOJGA4YnC",
+    "callbackURL": "/auth/naver/callback",
+    "authPath": "/auth/naver",
+    "callbackPath": "/auth/naver/callback",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/#/login",
+    "scope": ["email"],
+    "failureFlash": true
+  }
+}

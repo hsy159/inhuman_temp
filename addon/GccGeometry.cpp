@@ -19,6 +19,160 @@ CGccGeometry::~CGccGeometry()
 {
 }
 
+//17
+// 중복되지 않는 점만 삽입
+int CGccGeometry::Insert(VERTEX* VertexList, VERTEX InsertVertex, int& Last)
+{
+	//VERTEX* VertexTemp = NULL;
+	if (0 == Last)
+	{
+		VertexList[0] = InsertVertex;
+		++Last;
+	}
+	else
+	{
+		for (int i = 0; i <= Last / 2; i++)
+		{
+			if (VertexList[i].x == InsertVertex.x)
+			{
+				if (VertexList[i].y == InsertVertex.y &&
+					VertexList[i].z == InsertVertex.z)
+				{
+					return i;
+				}
+			}
+
+			if (VertexList[Last - 1 - i].x == InsertVertex.x)
+			{
+				if (VertexList[Last - 1 - i].y == InsertVertex.y &&
+					VertexList[Last - 1 - i].z == InsertVertex.z)
+				{
+					return Last - 1 - i;
+				}
+			}
+		}
+
+		VertexList[Last] = InsertVertex;
+		++Last;
+	}
+
+	return Last - 1;
+}
+
+//50
+int CGccGeometry::Insert(VERTEX* VertexList, float InsertVertex[3], int& Last)
+{
+	VERTEX vertex;
+	vertex.x = InsertVertex[0];
+	vertex.y = InsertVertex[1];
+	vertex.z = InsertVertex[2];
+
+	return Insert(VertexList, vertex, Last);
+}
+
+//61
+bool CGccGeometry::STLtoVertexList(VERTEX **VertexList, int &vertexLength,
+	FACE **FaceList, int &faceLength,
+	BinarySTLtriangle *STLFaceList, int stlLenght)
+{
+	if (stlLenght <= 0)
+	{
+		return false;
+	}
+
+	//
+	if (*FaceList)
+	{
+		delete[] * FaceList;
+		*FaceList = nullptr;
+	}
+
+	if (*VertexList)
+	{
+		delete[] * VertexList;
+		*VertexList = nullptr;
+	}
+
+	*FaceList = new FACE[stlLenght];
+
+	VERTEX *VListTemp = nullptr;
+	VListTemp = new VERTEX[stlLenght * 3];
+
+	faceLength = stlLenght;
+	vertexLength = 0;
+	int i;
+
+	for (i = 0; i < stlLenght; i++)
+	{
+		(*FaceList)[i].faceNormal.x = STLFaceList[i].Normal[0];
+		(*FaceList)[i].faceNormal.y = STLFaceList[i].Normal[1];
+		(*FaceList)[i].faceNormal.z = STLFaceList[i].Normal[2];
+
+		(*FaceList)[i].List[0] = Insert(VListTemp, STLFaceList[i].Vertex1, vertexLength);
+		(*FaceList)[i].List[1] = Insert(VListTemp, STLFaceList[i].Vertex2, vertexLength);
+		(*FaceList)[i].List[2] = Insert(VListTemp, STLFaceList[i].Vertex3, vertexLength);
+
+		if ((*FaceList)[i].faceNormal.x == 0.f &&
+			(*FaceList)[i].faceNormal.y == 0.f &&
+			(*FaceList)[i].faceNormal.z == 0.f)
+		{
+			CalcNormalVector(STLFaceList[i].Vertex1,
+				STLFaceList[i].Vertex2,
+				STLFaceList[i].Vertex3,
+				(*FaceList)[i].faceNormal);
+		}
+	}
+
+	*VertexList = new VERTEX[vertexLength];
+	memcpy(*VertexList, VListTemp, sizeof(VERTEX) * vertexLength);
+
+	delete[] VListTemp;
+	VListTemp = nullptr;
+
+	return true;
+}
+
+//136
+void CGccGeometry::CalcVertexNormal(VERTEX* NormalList, int VertexLength, FACE* FaceList, int FaceLength)
+{
+	for (int i = 0; i < VertexLength; i++)
+	{
+		NormalList[i].x = 0.f;
+		NormalList[i].y = 0.f;
+		NormalList[i].z = 0.f;
+	}
+
+	for (int i = 0; i < FaceLength; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			NormalList[FaceList[i].List[j]].x += FaceList[i].faceNormal.x;
+			NormalList[FaceList[i].List[j]].y += FaceList[i].faceNormal.y;
+			NormalList[FaceList[i].List[j]].z += FaceList[i].faceNormal.z;
+		}
+	}
+
+	for (int i = 0; i < VertexLength; i++)
+	{
+		ReduceToUnit(NormalList[i]);
+	}
+}
+
+//159
+void CGccGeometry::ReduceToUnit(VERTEX& vector)
+{
+	float length = sqrt((vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z));
+
+	if (0.f == length)
+	{
+		length = 1.0f;
+	}
+
+	vector.x /= length;
+	vector.y /= length;
+	vector.z /= length;
+}
+
 //173
 void CGccGeometry::RotateModel(VERTEX* VertexList, int VertexLength, float RadianX, float RadianY, float RadianZ)
 {
@@ -62,6 +216,22 @@ void CGccGeometry::Rotate(VERTEX& Vertex, float RadianX, float RadianY, float Ra
 		temp.z = Vertex.z;
 		Vertex = temp;
 	}
+}
+
+//238
+void CGccGeometry::TranslatedModel(VERTEX* VertexList, int VertexLength, float X, float Y, float Z)
+{
+	for (int i = 0; i < VertexLength; i++)
+	{
+		Translated(VertexList[i], X, Y, Z);
+	}
+}
+
+void CGccGeometry::Translated(VERTEX& Vertex, float X, float Y, float Z)
+{
+	Vertex.x += X;
+	Vertex.y += Y;
+	Vertex.z += Z;
 }
 
 //253
@@ -124,6 +294,26 @@ float CGccGeometry::CalcLineAngle2D(float P1[2], float P2[2])
 
 	float Result = atanf(y / x) * 180.f / (float)M_PI;
 	return Result;
+}
+
+void CGccGeometry::CalcNormalVector(VERTEX P1, VERTEX P2, VERTEX P3, VERTEX& Normal)
+{
+	float v1[3];
+	float v2[3];
+
+	v1[0] = P1.x - P2.x;
+	v1[1] = P1.y - P2.y;
+	v1[2] = P1.z - P2.z;
+
+	v2[0] = P2.x - P3.x;
+	v2[1] = P2.y - P3.y;
+	v2[2] = P2.z - P3.z;
+
+	Normal.x = v1[1] * v2[2] - v1[2] * v2[1];
+	Normal.y = v1[2] * v2[0] - v1[0] * v2[2];
+	Normal.z = v1[0] * v2[1] - v1[1] * v2[0];
+
+	ReduceToUnit(Normal);
 }
 
 //341
@@ -802,8 +992,6 @@ void CGccGeometry::CalcPartsVolumeNSurface(VERTEX* VertexList, int VertexLength,
 		return;
 	}
 
-	VERTEX** GirthList = nullptr;
-	int* GirthLength = nullptr;
 	int UnitLength[4] = { 0 };
 
 	GetMinMax(VertexList, VertexLength, Min, Max);
@@ -815,7 +1003,11 @@ void CGccGeometry::CalcPartsVolumeNSurface(VERTEX* VertexList, int VertexLength,
 
 	VERTEX P1, P2, Vector, insert;
 	int U1, U2 = 0;
+
+	VERTEX** GirthList = nullptr;
 	GirthList = new VERTEX*[TotalListLength];
+
+	int* GirthLength = nullptr;
 	GirthLength = new int[TotalListLength];
 
 	memset(GirthLength, 0, sizeof(int) * TotalListLength);
@@ -1588,6 +1780,7 @@ void CGccGeometry::CalcPartsVolumeNSurface(VERTEX* VertexList, int VertexLength,
 
 	for (int i = 0; i < TotalListLength; i++)
 	{
+		// 경고	C6001	초기화되지 않은 메모리 '*GirthList'을(를) 사용하고 있습니다.
 		delete[] GirthList[i];
 		GirthList[i] = nullptr;
 	}
@@ -2147,4 +2340,3 @@ void CGccGeometry::GetVtcOutlinePoints(VERTEX* VertexList, int VertexLength, FAC
 		List = nullptr;
 	}
 }
-

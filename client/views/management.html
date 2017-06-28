@@ -20,7 +20,7 @@
 <section>
 
   <body>
-    {{my}} {{myScanMetaData}} {{myClientId}} {{myClient}} {{birth}}
+    {{my}} {{myScanMetaData}} {{myClientId}} {{myClient}} {{this_Year}} {{birth_Year}} {{age}}
     <h1 align="center">회원정보 관리</h1>
     <br>
     <h3 align="right">Operator : {{currentOperator.name}}</h3>
@@ -47,7 +47,7 @@
       <tr ng-repeat="myclient in myClient">
         <td>{{myclient.email}}</td>
         <td>{{myclient.firstName}} {{myclient.lastName}} </td>
-        <td>{{this_Year - birth[$index]}}<td>
+        <td>{{age[$index]}}</td>
         <td>{{myclient.gender}}</td>
         <td>현재특징점</td>
         <td>{{myScanMetaData[$index].date|date:'yyyy년 MM월 dd일'}}</td>
